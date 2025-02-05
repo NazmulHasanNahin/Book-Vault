@@ -27,7 +27,7 @@ const Nav = () => {
                             tabIndex={0}
                             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                             <div className="navbar-center">
-                                <ul className="menu menu-horizontal px-1 space-x-1">
+                                <ul className="menu menu-horizontal px-1 space-x-4">
                                     <li>
                                         <Link
                                             to="/"

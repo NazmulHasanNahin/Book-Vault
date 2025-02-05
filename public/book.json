@@ -1,0 +1,103 @@
+[
+    {
+        "bookId": 1,
+        "bookName": "The Silent Patient",
+        "author": "Alex Michaelides",
+        "image": "https://i.ibb.co.com/Df6Rynt3/kindpng-1064993.png",
+        "review": "A gripping psychological thriller that keeps you guessing until the end.",
+        "totalPages": 336,
+        "rating": 4.5,
+        "category": "Thriller",
+        "tags": [
+            "Suspense",
+            "Psychological",
+            "Mystery"
+        ],
+        "publisher": "Celadon Books",
+        "yearOfPublishing": 2019
+    },
+    {
+        "bookId": 2,
+        "bookName": "Educated",
+        "author": "Tara Westover",
+        "image": "https://i.ibb.co.com/Zpd8bQJV/kindpng-7318921.png",
+        "review": "A powerful memoir about a woman who grows up in isolation and eventually escapes to seek education.",
+        "totalPages": 334,
+        "rating": 4.7,
+        "category": "Memoir",
+        "tags": [
+            "Inspirational",
+            "Biography"
+        ],
+        "publisher": "Random House",
+        "yearOfPublishing": 2018
+    },
+    {
+        "bookId": 3,
+        "bookName": "Where the Crawdads Sing",
+        "author": "Delia Owens",
+        "image": "https://i.ibb.co.com/CGgjVwN/kindpng-81724-1.png",
+        "review": "A mesmerizing tale of survival and love set in the marshlands of North Carolina.",
+        "totalPages": 368,
+        "rating": 4.8,
+        "category": "Fiction",
+        "tags": [
+            "Nature",
+            "Romance",
+            "Mystery"
+        ],
+        "publisher": "G.P. Putnam's Sons",
+        "yearOfPublishing": 2018
+    },
+    {
+        "bookId": 4,
+        "bookName": "Atomic Habits",
+        "author": "James Clear",
+        "image": "https://i.ibb.co.com/TM2XwbjX/kindpng-5624060-1.png",
+        "review": "An insightful guide on how small changes in habits can lead to remarkable results.",
+        "totalPages": 320,
+        "rating": 4.9,
+        "category": "Self-help",
+        "tags": [
+            "Productivity",
+            "Psychology",
+            "Behavior"
+        ],
+        "publisher": "Avery",
+        "yearOfPublishing": 2018
+    },
+    {
+        "bookId": 5,
+        "bookName": "The Testaments",
+        "author": "Margaret Atwood",
+        "image": "https://i.ibb.co.com/CsKWPj7B/kindpng-4945926-1.png",
+        "review": "A brilliant sequel to The Handmaid's Tale that expands the world of Gilead.",
+        "totalPages": 432,
+        "rating": 4.3,
+        "category": "Dystopian",
+        "tags": [
+            "Feminism",
+            "Political",
+            "Speculative Fiction"
+        ],
+        "publisher": "Nan A. Talese",
+        "yearOfPublishing": 2019
+    },
+    {
+        "bookId": 6,
+        "bookName": "Becoming",
+        "author": "Michelle Obama",
+        "image": "https://i.ibb.co.com/TMbQv9jZ/kindpng-4022054-1.png",
+        "review": "A deeply personal memoir by the former First Lady of the United States.",
+        "totalPages": 448,
+        "rating": 4.8,
+        "category": "Memoir",
+        "tags": [
+            "Biography",
+            "Inspirational",
+            "Political"
+        ],
+        "publisher": "Crown Publishing Group",
+        "yearOfPublishing": 2018
+    }
+]
