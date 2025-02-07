@@ -1,9 +1,29 @@
 import { useLoaderData, useParams } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import { isBookInList, saveBookToList } from "../../utility/localstorage";
 
 const BookDetails = () => {
     const books = useLoaderData();
     const { id } = useParams();
     const book = books.find((book) => book.bookId == id);
+
+    const handleSaveRead = (bookId) => {
+        if (!isBookInList("readBooks", bookId)) {
+            saveBookToList("readBooks", bookId);
+            toast.success("Book added to Read list");
+        } else {
+            toast.error("Book is already in Read list");
+        }
+    };
+
+    const handleSaveWishlist = (bookId) => {
+        if (!isBookInList("wishlistBooks", bookId)) {
+            saveBookToList("wishlistBooks", bookId);
+            toast.success("Book added to Wishlist");
+        } else {
+            toast.error("Book is already in Wishlist");
+        }
+    };
 
     if (!book) {
         return <div>Book not found.</div>;
@@ -11,7 +31,6 @@ const BookDetails = () => {
 
     return (
         <div className="container mx-auto p-6">
-
             <div className="flex flex-col lg:flex-row lg:space-x-10 items-center lg:items-start">
                 <div className="bg-gray-100 p-6 rounded-2xl w-full lg:w-1/2 flex justify-center">
                     <img className="max-w-xs h-96 lg:max-w-md rounded-md" src={book.image} alt={book.bookName} />
@@ -54,15 +73,22 @@ const BookDetails = () => {
                     </div>
 
                     <div className="flex space-x-4 mt-8">
-                        <button className="border border-gray-400 text-gray-800 px-6 py-2 rounded-lg">
+                        <button
+                            className="border border-gray-400 text-gray-800 px-6 py-2 rounded-lg"
+                            onClick={() => handleSaveRead(book.bookId)}
+                        >
                             Read
                         </button>
-                        <button className="bg-blue-500 text-white px-6 py-2 rounded-lg">
+                        <button
+                            className="bg-blue-500 text-white px-6 py-2 rounded-lg"
+                            onClick={() => handleSaveWishlist(book.bookId)}
+                        >
                             Wishlist
                         </button>
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 };
