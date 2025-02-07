@@ -13,7 +13,7 @@ const Banner = () => {
                         Explore our handpicked selection to bring new life to your reading space.
                     </p>
                     <div className="mt-6">
-                        <Link to="/list" className="px-6 py-3 bg-[#23be0a] text-white rounded-lg text-lg font-bold transition-all duration-300 transform hover:bg-[#1e9b08] hover:scale-105">
+                        <Link to="/listed-books" className="px-6 py-3 bg-[#23be0a] text-white rounded-lg text-lg font-bold transition-all duration-300 transform hover:bg-[#1e9b08] hover:scale-105">
                             View The List
                         </Link>
                     </div>
