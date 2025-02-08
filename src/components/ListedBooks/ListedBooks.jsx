@@ -1,129 +1,149 @@
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { useState, useEffect } from 'react';
-import { getBooksFromList } from '../../utility/localstorage'; // Function to fetch books from local storage
-import { Link } from 'react-router-dom';
+import { getBooksFromList } from '../../utility/localstorage';
+import { Link, useLoaderData } from 'react-router-dom';
+import { MdOutlineDateRange } from "react-icons/md";
 
 const ListedBooks = () => {
     const [readBooks, setReadBooks] = useState([]);
     const [wishlistBooks, setWishlistBooks] = useState([]);
-    const [sortOption, setSortOption] = useState('');
+
+    const bookData = useLoaderData();
 
     useEffect(() => {
-        // Fetch books from local storage for Read and Wishlist tabs
-        const fetchedReadBooks = getBooksFromList('readBooks') || [];
-        const fetchedWishlistBooks = getBooksFromList('wishlistBooks') || [];
-        setReadBooks(fetchedReadBooks);
-        setWishlistBooks(fetchedWishlistBooks);
-    }, []);
+        const fetchedReadBooks = getBooksFromList('readBooks');
+        const fetchedWishlistBooks = getBooksFromList('wishlistBooks');
 
-    const handleSortChange = (event) => {
-        setSortOption(event.target.value);
-    };
+        const readBooksWithDetails = fetchedReadBooks.map(bookId => bookData.find(book => book.bookId === bookId));
+        const wishlistBooksWithDetails = fetchedWishlistBooks.map(bookId => bookData.find(book => book.bookId === bookId));
 
-    const sortBooks = (books) => {
-        if (sortOption === 'rating') {
-            return books.sort((a, b) => b.rating - a.rating);
-        } else if (sortOption === 'pages') {
-            return books.sort((a, b) => b.totalPages - a.totalPages);
-        } else if (sortOption === 'year') {
-            return books.sort((a, b) => b.yearOfPublishing - a.yearOfPublishing);
-        }
-        return books;
-    };
+        setReadBooks(readBooksWithDetails);
+        setWishlistBooks(wishlistBooksWithDetails);
+    }, [bookData]);
 
     return (
-        <div>
-            {/* Header */}
+        <div className="container mx-auto py-12">
             <div className="text-4xl text-center bg-gray-200 rounded-xl my-12 p-6">
-                <p>Books</p>
+                <p>Books Collection</p>
             </div>
 
-            {/* Sort Dropdown */}
-            <div className="text-center mb-6">
-                <label htmlFor="sort" className="text-lg mr-3">Sort by:</label>
-                <select id="sort" className="border px-4 py-2 rounded-lg" value={sortOption} onChange={handleSortChange}>
-                    <option value="">None</option>
-                    <option value="rating">Rating</option>
-                    <option value="pages">Number of Pages</option>
-                    <option value="year">Published Year</option>
-                </select>
-            </div>
-
-            {/* Tabs for Read & Wishlist */}
-            <Tabs className="p-3 md:p-0">
+            <Tabs>
                 <TabList>
                     <Tab>Read Books</Tab>
                     <Tab>Wishlist Books</Tab>
                 </TabList>
 
-                {/* TabPanel for Read Books */}
                 <TabPanel>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {readBooks.length > 0 ? (
-                            sortBooks(readBooks).map((book) => (
-                                <div key={book.bookId || `read-book-${book.bookName || 'Unknown'}-${book.author || 'Unknown'}`} className="border rounded-lg p-4 shadow-md">
-                                    <img className="w-full h-64 object-cover rounded-md mb-4" src={book.image} alt={book.bookName} />
-                                    <h2 className="text-xl font-bold">{book.bookName}</h2>
-                                    <p className="text-gray-600">By: {book.author}</p>
-                                    <p className="text-gray-600">Category: {book.category}</p>
-                                    <p className="text-gray-600">Rating: {book.rating}</p>
-                                    
-                                    {/* Safeguard for book.tags */}
-                                    <div className="flex flex-wrap gap-2 mt-4">
-                                        {book.tags?.map((tag, index) => (
-                                            <span key={`tag-${book.bookId || book.bookName}-${index}`} className="bg-green-200 text-green-800 px-2 py-1 rounded-full text-xs">
-                                                {tag}
-                                            </span>
-                                        ))}
+                    <h1 className="text-xl my-6">Read Books: {readBooks.length}</h1>
+                    <div className="flex flex-col gap-8">
+                        {readBooks.map((book, index) => (
+                            <div key={index} className="p-6 rounded-2xl border border-gray-200 flex flex-col lg:flex-row gap-6 bg-white shadow-md">
+                                <div className="flex items-center justify-center bg-gray-100 rounded-2xl border-2 border-gray-200 w-full lg:w-52">
+                                    <img
+                                        src={book.image}
+                                        alt={book.bookName}
+                                        className="rounded-2xl object-cover md:w-[129.32px] md:h-[172px] "
+                                    />
+                                </div>
+
+                                <div className="flex-1 flex flex-col gap-4">
+                                    <div className="flex flex-col gap-2">
+                                        <h2 className="text-[#131313] text-2xl font-bold font-['Playfair Display']">{book.bookName}</h2>
+                                        <p className="text-[#131313]/80 text-base font-medium font-['Work Sans']">By: {book.author}</p>
                                     </div>
 
-                                    <Link to={`/books/${book.bookId}`}>
-                                        <button className="bg-blue-500 text-white mt-4 px-4 py-2 rounded-lg w-full">
-                                            View Details
-                                        </button>
-                                    </Link>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No read books available.</p>
-                        )}
-                    </div>
-                </TabPanel>
-
-                {/* TabPanel for Wishlist Books */}
-                <TabPanel>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {wishlistBooks.length > 0 ? (
-                            sortBooks(wishlistBooks).map((book) => (
-                                <div key={book.bookId || `wishlist-book-${book.bookName || 'Unknown'}-${book.author || 'Unknown'}`} className="border rounded-lg p-4 shadow-md">
-                                    <img className="w-full h-64 object-cover rounded-md mb-4" src={book.image} alt={book.bookName} />
-                                    <h2 className="text-xl font-bold">{book.bookName}</h2>
-                                    <p className="text-gray-600">By: {book.author}</p>
-                                    <p className="text-gray-600">Category: {book.category}</p>
-                                    <p className="text-gray-600">Rating: {book.rating}</p>
-                                    
-                                    {/* Safeguard for book.tags */}
-                                    <div className="flex flex-wrap gap-2 mt-4">
-                                        {book.tags?.map((tag, index) => (
-                                            <span key={`tag-${book.bookId || book.bookName}-${index}`} className="bg-green-200 text-green-800 px-2 py-1 rounded-full text-xs">
-                                                {tag}
-                                            </span>
-                                        ))}
+                                    <div className="flex flex-col gap-3">
+                                        <div className="flex flex-wrap gap-3">
+                                            <span className="text-[#131313] text-base font-bold font-['Work Sans']">Tag:</span>
+                                            {book.tags?.map((tag, idx) => (
+                                                <span key={idx} className="bg-[#23be0a]/10 text-[#23be0a] px-3 py-1 rounded-full text-sm font-medium font-['Work Sans']">{tag}</span>
+                                            ))}
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <MdOutlineDateRange className="text-[#131313]/80 text-xl" />
+                                            <p className="text-[#131313]/80 text-base font-normal font-['Work Sans']">Year of Publishing: {book.yearOfPublishing}</p>
+                                        </div>
                                     </div>
 
-                                    <Link to={`/books/${book.bookId}`}>
-                                        <button className="bg-blue-500 text-white mt-4 px-4 py-2 rounded-lg w-full">
+                                    <div>
+                                        <p className="text-[#131313]/60 text-base font-normal font-['Work Sans']">Publisher: {book.publisher}</p>
+                                        <p className="text-[#131313]/60 text-base font-normal font-['Work Sans']">Pages: {book.totalPages}</p>
+                                    </div>
+
+                                    <div className="border-t border-gray-300 mt-2"></div>
+
+                                    <div className="flex flex-wrap justify-start gap-4 mt-4">
+                                        <span className="px-4 py-2 bg-[#328eff]/20 text-[#328eff] rounded-full text-sm font-medium font-['Work Sans']">Category: {book.category}</span>
+                                        <span className="px-4 py-2 bg-[#ffac33]/20 text-[#ffac33] rounded-full text-sm font-medium font-['Work Sans']">Rating: {book.rating}</span>
+                                        <Link to={`/book/${book.bookId}`} className="px-6 py-2 bg-[#23be0a] rounded-full text-white text-lg font-medium font-['Work Sans'] hover:bg-[#1e9a08] transition-all">
                                             View Details
-                                        </button>
-                                    </Link>
+                                        </Link>
+                                    </div>
                                 </div>
-                            ))
-                        ) : (
-                            <p>No wishlist books available.</p>
-                        )}
+                            </div>
+                        ))}
                     </div>
                 </TabPanel>
+                <TabPanel>
+                    <h1 className="text-xl my-6">Wishlist Books: {wishlistBooks.length}</h1>
+                    <div className="flex flex-col gap-8">
+                        {wishlistBooks.map((book, index) => (
+                            <div key={index} className="p-6 rounded-2xl border border-gray-200 flex flex-col lg:flex-row gap-6 bg-white shadow-md">
+                                <div className="flex items-center justify-center bg-gray-100 rounded-2xl border-2 border-gray-200 w-full lg:w-52">
+                                    <img
+                                        src={book.image}
+                                        alt={book.bookName}
+                                        className="rounded-2xl object-cover md:w-[129.32px] md:h-[172px] "
+                                    />
+                                </div>
+
+                                <div className="flex-1 flex flex-col gap-4">
+                                    <div className="flex flex-col gap-2">
+                                        <h2 className="text-[#131313] text-2xl font-bold font-['Playfair Display']">{book.bookName}</h2>
+                                        <p className="text-[#131313]/80 text-base font-medium font-['Work Sans']">By: {book.author}</p>
+                                    </div>
+
+                                    <div className="flex flex-col gap-3">
+                                        <div className="flex flex-wrap gap-3">
+                                            <span className="text-[#131313] text-base font-bold font-['Work Sans']">Tag:</span>
+                                            {book.tags?.map((tag, idx) => (
+                                                <span key={idx} className="bg-[#23be0a]/10 text-[#23be0a] px-3 py-1 rounded-full text-sm font-medium font-['Work Sans']">{tag}</span>
+                                            ))}
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <MdOutlineDateRange className="text-[#131313]/80 text-xl" />
+                                            <p className="text-[#131313]/80 text-base font-normal font-['Work Sans']">Year of Publishing: {book.yearOfPublishing}</p>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-[#131313]/60 text-base font-normal font-['Work Sans']">Publisher: {book.publisher}</p>
+                                        <p className="text-[#131313]/60 text-base font-normal font-['Work Sans']">Pages: {book.totalPages}</p>
+                                    </div>
+
+                                    <div className="border-t border-gray-300 mt-2"></div>
+
+                                    <div className="flex flex-wrap justify-start gap-4 mt-4">
+                                        <span className="px-4 py-2 bg-[#328eff]/20 text-[#328eff] rounded-full text-sm font-medium font-['Work Sans']">Category: {book.category}</span>
+                                        <span className="px-4 py-2 bg-[#ffac33]/20 text-[#ffac33] rounded-full text-sm font-medium font-['Work Sans']">Rating: {book.rating}</span>
+                                        <Link to={`/book/${book.bookId}`} className="px-6 py-2 bg-[#23be0a] rounded-full text-white text-lg font-medium font-['Work Sans'] hover:bg-[#1e9a08] transition-all">
+                                            View Details
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </TabPanel>
+            </Tabs>
+
+            <Tabs className="p-3 md:p-0">
+
+
+
+
+
             </Tabs>
         </div>
     );
